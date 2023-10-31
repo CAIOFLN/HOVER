@@ -8,7 +8,6 @@ Panels:
         - /Status1
         - /RobotModel1
         - /RobotModel1/Links1/base_link1
-        - /RobotModel1/Links1/camera_link1
         - /RobotModel1/Links1/left_back_wheel1
         - /RobotModel1/Links1/left_front_wheel1
         - /RobotModel1/Links1/right_back_wheel1
@@ -75,11 +74,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         left_back_wheel:
           Alpha: 1
           Show Axes: false
@@ -96,6 +90,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         right_front_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        sensor_link_right:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -209,5 +208,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1294
-  X: 72
-  Y: 27
+  X: 2246
+  Y: 146

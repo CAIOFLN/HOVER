@@ -292,7 +292,7 @@
 
 <joint name="sensor_joint_right" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0.0 0.22 0.12" rpy="0.1 +0.8 1.75" />
+    <origin xyz="0.0 0.22 0.12" rpy="0 0 1.57079633" />
     <parent link="base_link" />
     <child link="sensor_link_right" />
   </joint>
@@ -325,7 +325,7 @@
     <sensor type="camera" name="camera_right">
       <update_rate>30.0</update_rate>
       <camera name="head">
-        <horizontal_fov>1.047</horizontal_fov>
+        <horizontal_fov>1.5</horizontal_fov>
           <image>
               <width>640</width>
               <height>480</height>
