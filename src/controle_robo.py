@@ -6,7 +6,7 @@ import numpy as np
 from sensor_msgs.msg import Image, CameraInfo
 from std_msgs.msg import Float64
 from cv_bridge import CvBridge, CvBridgeError
-
+#AVATAR È LEGAL
 class SET_POINT:
     def __init__(self):
         # Inicialização do nó ROS
