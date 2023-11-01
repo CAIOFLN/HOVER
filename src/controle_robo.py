@@ -6,7 +6,7 @@ import numpy as np
 from sensor_msgs.msg import Image, CameraInfo
 from std_msgs.msg import Float64
 from cv_bridge import CvBridge, CvBridgeError
-#AVATAR È LEGAL
+
 class SET_POINT:
     def __init__(self):
         # Inicialização do nó ROS
@@ -24,10 +24,10 @@ class SET_POINT:
         self.Mgreen = 0
         self.Mred = 0
 
-
+        
 
         self.combined_mask_x_history = []  # Lista para armazenar os últimos valores
-        self.average_window_size = 25  # Tamanho da janela para calcular a média
+        self.average_window_size = 35  # Tamanho da janela para calcular a média
 
     def image_callback(self, msg):
         # Conversão da mensagem da imagem para o formato OpenCV
@@ -37,6 +37,7 @@ class SET_POINT:
         image[0:height, int(2*width/5):int(3*width/5)] = 0
         # Detecção da cor verde
         green_mask = cv2.inRange(hsv, self.lower_green, self.upper_green)
+        #green_mask[0:height, int(3*width/5):int(5*width/5)] = 0
         green_mask_largest = np.zeros_like(green_mask)
         green_contours, _ = cv2.findContours(green_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(green_contours) >= 2:
@@ -56,6 +57,7 @@ class SET_POINT:
 
         # Detecção da cor vermelha
         red_mask = cv2.inRange(hsv, self.lower_red, self.upper_red)
+        #red_mask[0:height, 0:int(3*width/5)] = 0
         red_mask_largest = np.zeros_like(green_mask)
         red_contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(red_contours) >= 2:
@@ -100,7 +102,7 @@ class SET_POINT:
             if len(self.combined_mask_x_history) > self.average_window_size:
                 self.combined_mask_x_history.pop(0)
             combined_mask_x_avg = sum(self.combined_mask_x_history) / len(self.combined_mask_x_history)  
-
+            cv2.circle(combined_mask, ((int(np.ceil(combined_mask_x_avg+320)), combined_mask.shape[0] // 2)), 5, 255, -1)
 
         # Exibição das máscaras e da máscara combinada
         #cv2.imshow("green_mask", green_mask)
