@@ -3,7 +3,7 @@
 	<arg name="model" default="$(find project_ws)/urdf/description.urdf"/>
 	<!--arg name="world" default="pista5x" /--> 
     <arg name="pause" default="true"/>
-    <arg name="world" default="$(find project_ws)/worlds/empty.world" />
+    <arg name="world" default="$(find project_ws)/worlds/retacrob.world" />
 	<!-- Inclui o arquivo de inicialização do Gazebo, fornecido pelo pacote gazebo_ros -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg world)" />

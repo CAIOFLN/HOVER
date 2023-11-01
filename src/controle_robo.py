@@ -24,10 +24,12 @@ class SET_POINT:
         self.Mgreen = 0
         self.Mred = 0
 
-        
+        self.fudeu_green = 0
+        self.fudeu_red = 0
+
 
         self.combined_mask_x_history = []  # Lista para armazenar os últimos valores
-        self.average_window_size = 35  # Tamanho da janela para calcular a média
+        self.average_window_size = 20  # Tamanho da janela para calcular a média
 
     def image_callback(self, msg):
         # Conversão da mensagem da imagem para o formato OpenCV
@@ -98,6 +100,10 @@ class SET_POINT:
                 XcmR = 0
 
             Xcm = (MR['m00']*XcmR+MG['m00']*XcmG)/(MR['m00']+MG['m00'])
+            if (self.fudeu_red):
+                Xcm = Xcm + 20
+            if (self.fudeu_green):
+                Xcm = Xcm - 20
             self.combined_mask_x_history.append(Xcm)
             if len(self.combined_mask_x_history) > self.average_window_size:
                 self.combined_mask_x_history.pop(0)
@@ -107,8 +113,8 @@ class SET_POINT:
         # Exibição das máscaras e da máscara combinada
         #cv2.imshow("green_mask", green_mask)
         #cv2.imshow("red_mask", red_mask)
-        cv2.imshow("green_mask_largest", green_mask_largest)
-        cv2.imshow("red_mask_largest", red_mask_largest)
+        #cv2.imshow("green_mask_largest", green_mask_largest)
+        #cv2.imshow("red_mask_largest", red_mask_largest)
         #cv2.imshow("Result Image", combined_mask)
         cv2.waitKey(3)
         image_with_masks_msg = self.bridge.cv2_to_imgmsg(combined_mask, "mono8")
