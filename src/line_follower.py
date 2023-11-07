@@ -5,24 +5,20 @@ from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64
 
-TIME_STEP = 0.001
-output_topic = rospy.Publisher('/output', Float64, queue_size=1)
-setpoint_topic = rospy.Publisher('/setpoint', Float64, queue_size=1)
-class Hover:
+
+class Controle:
 
     def __init__(self):
-
-        self.bridge = cv_bridge.CvBridge()
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-        self.recebe_bloco_azul = rospy.Subscriber('image_data', Float64, self.processa_curva)
+        self.control_sub = rospy.Subscriber('/set_point', Float64, self.controller) #NÃO RECEBE IMAGE
         self.twist = Twist()
-        self.controle1 = self.PID(kp=60, ki=0, kd=0, target=320)
+        self.controle1 = self.PID(kp=.00001, ki=0, kd=.00001, target=320)
         self.cx = 0
-    def processa_curva(self, msg):
+    def controller(self, msg):
         self.cx = msg.data
         self.twist.angular.z = self.controle1.compute(self.cx)
         print(self.twist.angular.z)
-        self.twist.linear.x = -0.8
+        self.twist.linear.x = 0.7
         self.cmd_vel_pub.publish(self.twist)
 
 
@@ -37,17 +33,15 @@ class Hover:
             self.error_last = 0
             self.derivate_error = 0
             self.output = 0
-        def compute(self, xcm):
-            self.error = -float(1/(xcm - self.pos))
-            self.integral_error += self.error * TIME_STEP
+        def compute(self, erro_msg):
+            self.error = erro_msg
+            self.integral_error += self.error
             self.derivate_error = (self.error - self.error_last)
             self.error_last = self.error
             self.output = self.kp * self.error + self.kd * self.derivate_error + self.ki * self.integral_error
-            output_topic.publish(Float64(data=self.output))
-            setpoint_topic.publish(Float64(data=(self.kp*xcm/20)))
-            #rospy.sleep(1)
+
             return self.output
 
-rospy.init_node('hover')
-hover = Hover()
+rospy.init_node('Controle')
+control = Controle()
 rospy.spin()
