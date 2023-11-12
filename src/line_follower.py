@@ -18,7 +18,7 @@ class Controle:
         self.cx = msg.data
         self.twist.angular.z = self.controle1.compute(self.cx)
         print(self.twist.angular.z)
-        self.twist.linear.x = 0.7
+        self.twist.linear.x = 1
         self.cmd_vel_pub.publish(self.twist)
 
 

@@ -47,4 +47,17 @@
     args="-d $(find hover)/rviz/urdf.rviz"> 
 </node>
 
+<node
+    name="Controle"
+    pkg="hover" 
+    type="line_follower.py"
+    output= "screen">  
+</node>
+
+<node
+    name="Set_Point"
+    pkg="hover" 
+    type="controle_robo.py"
+    output="screen"> 
+</node>
 </launch>

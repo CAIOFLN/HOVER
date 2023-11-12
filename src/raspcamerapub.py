@@ -44,7 +44,7 @@ def capture_and_publish_image():
         if not ret:
             break
 
-        camera_matrix = np.array([[314.000745, 0.000000, 309.555461], [0.000000, 315.533321, 223.927141],[0.000000, 0.000000, 1.000000]])
+        """camera_matrix = np.array([[314.000745, 0.000000, 309.555461], [0.000000, 315.533321, 223.927141],[0.000000, 0.000000, 1.000000]])
 
         distorcion_coef = np.array([[-0.280652, 0.054617, -0.000586, -0.002693, 0.000000]])
 
@@ -55,8 +55,8 @@ def capture_and_publish_image():
         frame = cv2.undistort(frame, camera_matrix, distorcion_coef, None, newcameramtx)
 
         x, y, w, h = roi
-        frame = frame[y:y+h, x:x+w] 
-
+        frame = frame[y:y+h, x:x+w]""" 
+        #frame = camera_calibration(frame)
         # Converta a imagem do OpenCV para uma mensagem ROS
         ros_image = bridge.cv2_to_imgmsg(frame, "bgr8")
 
@@ -68,4 +68,3 @@ def capture_and_publish_image():
 
 if __name__ == '__main__':
     capture_and_publish_image()
-

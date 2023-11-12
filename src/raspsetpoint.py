@@ -15,18 +15,18 @@ class SET_POINT:
     def __init__(self):
         # Inicialização do nó ROS
         self.bridge = cv_bridge.CvBridge()
-        self.image_sub = rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_callback)
+        self.image_sub = rospy.Subscriber('/camera/image', Image, self.image_callback)
         self.set_point_pub = rospy.Publisher('set_point', Float64, queue_size=1)
         self.image_publisher = rospy.Publisher('image_with_masks', Image, queue_size=1)  # Tópico para publicar a imagem com as máscaras
 
         # Definição das faixas de cores em formato HSV
-        self.lower_green = np.array([40, 100, 100])   # HSV (verde)
-        self.upper_green = np.array([80, 255, 255])  # HSV (verde)
-        self.lower_red = np.array([0, 100, 100])    # HSV (vermelho)
-        self.upper_red = np.array([20, 255, 255])   # HSV (vermelho)
+        self.lower_green = np.array([100, 0, 0])   # HSV (verde)
+        self.upper_green = np.array([130, 255, 255])  # HSV (verde)
+        self.lower_red = np.array([5, 0, 0])    # HSV (vermelho)
+        self.upper_red = np.array([170, 255, 255])   # HSV (vermelho)
 
         self.set_point_history = []  # Lista para armazenar os últimos valores
-        self.average_window_size = 20  # Tamanho da janela para calcular a média
+        self.average_window_size = 1  # Tamanho da janela para calcular a média
 
         self.max_setpoint = 40000
         self.min_setpoint = -40000
@@ -45,28 +45,29 @@ class SET_POINT:
             green_contours = sorted(green_contours, key=cv2.contourArea, reverse=True)
 
             # Pegue os dois maiores contornos
-            green_largest_contours = green_contours[:2]
+            green_largest_contours = green_contours[:1]
 
             # Desenhe os dois maiores contornos na máscara
             for contour in green_largest_contours:
                 cv2.drawContours(green_mask_largest, [contour], 0, 255, -1)
-
+        cv2.imshow("Green Vision", green_mask_largest)
         # Detecção da cor vermelha
         red_mask = cv2.inRange(hsv, self.lower_red, self.upper_red)
-        red_mask_largest = np.zeros_like(green_mask)
-        red_contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        not_red_mask = cv2.bitwise_not(red_mask)
+        red_mask_largest = np.zeros_like(not_red_mask)
+        red_contours, _ = cv2.findContours(not_red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(red_contours) >= 2:
         # Classifique os contornos pelo tamanho em ordem decrescente
             self.fudeu_red = 0
             red_contours = sorted(red_contours, key=cv2.contourArea, reverse=True)
 
             # Pegue os dois maiores contornos
-            red_largest_contours = red_contours[:2]
+            red_largest_contours = red_contours[:1]
 
             # Desenhe os dois maiores contornos na máscara
             for contour in red_largest_contours:
                 cv2.drawContours(red_mask_largest, [contour], 0, 255, -1)
-
+        cv2.imshow("Red Vision", red_mask_largest)
 
 
         gM = cv2.moments(green_mask_largest)
