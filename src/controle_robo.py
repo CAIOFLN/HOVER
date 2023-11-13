@@ -35,7 +35,6 @@ class SET_POINT:
         # Conversão da mensagem da imagem para o formato OpenCV
         image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        
         # Detecção da cor verde
         green_mask = cv2.inRange(hsv, self.lower_green, self.upper_green)
         green_mask_largest = np.zeros_like(green_mask)
@@ -80,8 +79,8 @@ class SET_POINT:
         if len(self.set_point_history) > self.average_window_size:
             self.set_point_history.pop(0)
         set_point_suavizado = sum(self.set_point_history) / len(self.set_point_history)  
-
         set_point_msg = Float64(data=set_point_suavizado)
+        print(set_point_msg)
         self.set_point_pub.publish(set_point_msg)
 
         if set_point_suavizado > self.max_setpoint:
@@ -104,6 +103,6 @@ class SET_POINT:
         cv2.imshow("Hover\'s Vision", image)
         cv2.waitKey(3)
         
-rospy.init_node('Set_Point')
-Processa = SET_POINT()
-rospy.spin()
+#rospy.init_node('Set_Point')
+#Processa = SET_POINT()
+#rospy.spin()

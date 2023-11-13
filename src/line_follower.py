@@ -42,6 +42,6 @@ class Controle:
 
             return self.output
 
-rospy.init_node('Controle')
-control = Controle()
-rospy.spin()
+#rospy.init_node('Controle')
+#control = Controle()
+#rospy.spin()

@@ -18,13 +18,13 @@
     textfile="$(find hover)/urdf/description.urdf" />
 
 	<!-- Executa o nó gerador do pacote gazebo_ros. O nome não importa se você tiver apenas um único robô. -->
-	<node 
+	<!-- <node 
     name="urdf_spawner" 
     pkg="gazebo_ros" 
     type="spawn_model"
     args="-y -2 -x +0.5 -urdf -model robot -param robot_description" 
     respawn="false" 
-    output="screen" />
+    output="screen" /> -->
     <!-- converter o estado de cada joints em transformações TF para  o rviz -->
 <node 
   name="robot_state_publisher" 
@@ -47,7 +47,21 @@
     args="-d $(find hover)/rviz/urdf.rviz"> 
 </node>
 
+<!-- 
 <node
+    name="Controle"
+    pkg="hover" 
+    type="line_follower.py"
+    output= "screen">  
+</node> -->
+
+<node
+    name="hover_node"
+    pkg="hover"
+    type="main.py"
+    output="screen">
+</node>
+<!-- <node
     name="Controle"
     pkg="hover" 
     type="line_follower.py"
@@ -59,5 +73,5 @@
     pkg="hover" 
     type="controle_robo.py"
     output="screen"> 
-</node>
+</node> -->
 </launch>
