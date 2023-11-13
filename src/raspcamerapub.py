@@ -58,6 +58,7 @@ def capture_and_publish_image():
         frame = frame[y:y+h, x:x+w]""" 
         #frame = camera_calibration(frame)
         # Converta a imagem do OpenCV para uma mensagem ROS
+        frame = cv2.rotate(frame, cv2.ROTATE_180)
         ros_image = bridge.cv2_to_imgmsg(frame, "bgr8")
 
         # Publique a imagem
